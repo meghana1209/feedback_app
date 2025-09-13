@@ -40,3 +40,43 @@ router.post('/login', async (req, res) => {
 });
 
 module.exports = router;
+
+// Profile: view current user
+router.get('/profile', require('../middleware/auth').authenticateJWT, async (req, res) => {
+	try {
+		const user = await User.findById(req.user.id).select('-password');
+		res.json(user);
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
+});
+
+// Profile: update current user
+router.put('/profile', require('../middleware/auth').authenticateJWT, async (req, res) => {
+	try {
+		const updates = { ...req.body };
+		delete updates.email; // Email is read-only
+		const user = await User.findByIdAndUpdate(req.user.id, updates, { new: true }).select('-password');
+		res.json(user);
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
+});
+
+// Profile: change password
+router.put('/profile/password', require('../middleware/auth').authenticateJWT, async (req, res) => {
+	try {
+		const { oldPassword, newPassword } = req.body;
+		if (!validatePassword(newPassword)) {
+			return res.status(400).json({ message: 'Password must be at least 8 chars, 1 number, 1 special char.' });
+		}
+		const user = await User.findById(req.user.id);
+		const isMatch = await user.comparePassword(oldPassword);
+		if (!isMatch) return res.status(401).json({ message: 'Old password incorrect' });
+		user.password = newPassword;
+		await user.save();
+		res.json({ message: 'Password updated' });
+	} catch (err) {
+		res.status(400).json({ message: err.message });
+	}
+});
