@@ -45,8 +45,33 @@ JWT_SECRET=your_jwt_secret
 - Signup as student via frontend
 - Admin login: use an account with role 'admin'
 
-## Deployment
-- Ready for Render, Vercel, or Railway
+
+## Deployment Instructions
+
+### Render (Backend)
+1. Create a new Web Service on Render
+2. Connect your GitHub repo
+3. Set build command: `npm install`
+4. Set start command: `npm start`
+5. Add environment variables from `.env`
+6. Set MongoDB URI (use Render's managed MongoDB or Atlas)
+
+### Vercel (Frontend)
+1. Import your repo in Vercel
+2. Set build command: `npm install && npm run build`
+3. Set output directory: `build`
+4. Configure environment variables if needed
+
+### Railway (Full Stack)
+1. Create a new project in Railway
+2. Add backend and frontend as separate services
+3. Set up environment variables
+4. Deploy MongoDB plugin or connect to Atlas
+
+### Notes
+- Ensure CORS is configured for production
+- Update API URLs in frontend for deployment
+- For Cloudinary, add credentials to `.env` and integrate in profile image upload
 
 ## Incremental Commits
 Each module is committed separately for clarity and maintainability.
