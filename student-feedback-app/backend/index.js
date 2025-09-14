@@ -19,9 +19,10 @@ app.use("/api/auth", authRoutes);
 app.use(express.static(path.join(__dirname, "frontend/build")));
 
 // Catch-all route to serve frontend for any other route
-app.get("/*", (req, res) => {
-  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
+app.get('/:path(*)', (req, res) => {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
+
 
 // Centralized error handler
 app.use((err, req, res, next) => {
