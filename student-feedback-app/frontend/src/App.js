@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
-import FeedbackPage from './pages/FeedbackPage';
+import FeedbackPage from './pages/FeedbackPage'; // Must match file exactly
+
 
 function App() {
   const [courses, setCourses] = useState([]);
