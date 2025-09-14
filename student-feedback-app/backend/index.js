@@ -1,4 +1,5 @@
 const express = require("express");
+const path = require("path");
 const connectDB = require("./config/db");
 const cors = require("cors");
 require("dotenv").config();
@@ -11,12 +12,15 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Routes
+// API Routes
 app.use("/api/auth", authRoutes);
 
-// Test route for root
-app.get("/", (req, res) => {
-  res.send("Student Feedback API is running 🚀");
+// Serve frontend build (React or static files)
+app.use(express.static(path.join(__dirname, "frontend/build")));
+
+// Catch-all route to serve frontend for any other route
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "frontend/build", "index.html"));
 });
 
 // Centralized error handler
